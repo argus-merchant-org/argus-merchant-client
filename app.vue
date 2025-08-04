@@ -1,26 +1,14 @@
 <script setup>
 import '@unocss/reset/tailwind.css'
 
+// 簡化的 head 配置
 useHead({
+  title: 'Argus Merchant Games',
   htmlAttrs: {
     lang: 'zh',
   },
-  charset: 'utf-8',
-  title: 'Argus Merchant Games',
-  titleTemplate: title => (title !== 'Argus Merchant Games' ? `${title} · Argus Merchant Games` : title),
   meta: [
     { name: 'description', content: '享受最優質的線上遊戲體驗，包含老虎機、桌面遊戲等多種遊戲類型' },
-    { property: 'og:image', content: '/games-og.png' },
-    { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:site', content: '@argus_merchant' },
-    { name: 'twitter:creator', content: '@argus_merchant' },
-  ],
-  link: [
-    {
-      rel: 'icon',
-      type: 'image/webp',
-      href: '/games.webp',
-    },
   ],
 })
 </script>
