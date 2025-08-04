@@ -127,3 +127,51 @@ export interface QueryItem {
 export interface Credits {
   cast: Media[]
 }
+
+// 遊戲相關類型定義
+export interface Game {
+  game_id: number
+  game_code: string
+  game_name_cn: string
+  game_name_en: string
+  game_cover_image: string
+  game_report_name: string
+  brand: string
+  category: 'slot' | 'table' | 'live' | 'arcade'
+  rating: number
+  is_featured: boolean
+  is_demo_available: boolean
+  is_real_available: boolean
+  demo_url?: string
+  real_url?: string
+  min_bet?: number
+  max_bet?: number
+  rtp?: number
+  volatility?: 'low' | 'medium' | 'high'
+  release_date?: string
+  description_cn?: string
+  description_en?: string
+}
+
+export interface GameBrand {
+  id: string
+  name_cn: string
+  name_en: string
+  logo: string
+  game_count: number
+}
+
+export interface GameCategory {
+  id: string
+  name_cn: string
+  name_en: string
+  icon: string
+}
+
+export interface GameQuery {
+  type: 'featured' | 'brand' | 'category' | 'search'
+  title: string
+  query: string
+  brand?: string
+  category?: string
+}

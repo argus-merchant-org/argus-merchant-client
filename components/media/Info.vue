@@ -15,7 +15,7 @@ const directors = computed(() => props.item.credits?.crew.filter(person => perso
 </script>
 
 <template>
-  <div p4 grid="~ cols-[max-content_1fr]" gap-8 items-center ma max-w-300>
+  <div p4 grid="~ cols-max-content_1fr" gap-8 items-center ma max-w-300>
     <NuxtImg
       width="400"
       height="600"
@@ -26,7 +26,7 @@ const directors = computed(() => props.item.credits?.crew.filter(person => perso
       transition duration-400 object-cover aspect="10/16"
       :style="{ 'view-transition-name': `item-${props.item.id}` }"
     />
-    <div lt-md:w="[calc(100vw-2rem)]" flex="~ col" md:p4 gap6>
+    <div lt-md:w="calc(100vw-2rem)" flex="~ col" md:p4 gap6>
       <div v-if="props.item.overview">
         <h2 text-3xl mb4>
           {{ $t('Storyline') }}
@@ -35,7 +35,7 @@ const directors = computed(() => props.item.credits?.crew.filter(person => perso
       </div>
 
       <div text-sm op80>
-        <ul grid="~ cols-[max-content_1fr] lg:cols-[max-content_1fr_max-content_1fr] gap3" items-center>
+        <ul grid="~ cols-max-content_1fr lg:cols-max-content_1fr_max-content_1fr gap3" items-center>
           <template v-if="props.item.release_date">
             <div>
               {{ $t('Release Date') }}

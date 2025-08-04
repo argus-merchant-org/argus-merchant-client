@@ -10,7 +10,7 @@ const externalIds = computed(() => ({ ...props.item.external_ids, homepage: prop
 </script>
 
 <template>
-  <div p4 grid="~ md:cols-[max-content_1fr]" gap-8 items-center ma max-w-300 data-testid="person-details-container">
+  <div p4 grid="~ md:cols-max-content_1fr" gap-8 items-center ma max-w-300 data-testid="person-details-container">
     <NuxtImg
       v-if="props.item.profile_path"
       width="400"
@@ -35,7 +35,7 @@ const externalIds = computed(() => ({ ...props.item.external_ids, homepage: prop
       </div>
 
       <div text-sm op80>
-        <ul grid="~ cols-[max-content_1fr] gap3" items-center>
+        <ul grid="~ cols-max-content_1fr gap3" items-center>
           <template v-if="props.item.known_for_department">
             <div op60 data-testid="known-for-label">
               {{ $t('Known for') }}

@@ -3,23 +3,23 @@ import '@unocss/reset/tailwind.css'
 
 useHead({
   htmlAttrs: {
-    lang: 'en',
+    lang: 'zh',
   },
   charset: 'utf-8',
-  title: 'Nuxt Movies',
-  titleTemplate: title => (title !== 'Nuxt Movies' ? `${title} · Nuxt Movies` : title),
+  title: 'Argus Merchant Games',
+  titleTemplate: title => (title !== 'Argus Merchant Games' ? `${title} · Argus Merchant Games` : title),
   meta: [
-    { name: 'description', content: 'A TMDB client built with Nuxt Image to show the potential of it ✨' },
-    { property: 'og:image', content: 'https://movies.nuxt.space/social-card.png' },
+    { name: 'description', content: '享受最優質的線上遊戲體驗，包含老虎機、桌面遊戲等多種遊戲類型' },
+    { property: 'og:image', content: '/games-og.png' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:site', content: '@nuxt_js' },
-    { name: 'twitter:creator', content: '@nuxt_js' },
+    { name: 'twitter:site', content: '@argus_merchant' },
+    { name: 'twitter:creator', content: '@argus_merchant' },
   ],
   link: [
     {
       rel: 'icon',
       type: 'image/webp',
-      href: '/movies.webp',
+      href: '/games.webp',
     },
   ],
 })
@@ -27,7 +27,7 @@ useHead({
 
 <template>
   <NuxtLoadingIndicator />
-  <div h-full w-full font-sans grid="~ lt-lg:rows-[1fr_max-content] lg:cols-[max-content_1fr]" of-hidden view-transition-app transition duration-0>
+  <div h-full w-full font-sans grid="~ lt-lg:rows-1fr_max-content lg:cols-max-content_1fr" of-hidden view-transition-app transition duration-0>
     <div id="app-scroller" of-x-hidden of-y-auto relative>
       <NuxtPage />
     </div>

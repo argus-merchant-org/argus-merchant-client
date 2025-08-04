@@ -27,6 +27,7 @@ Check [proxy/README](./proxy)
 $ corepack enable
 
 # Install dependencies
+$ npm install -g pnpm
 $ pnpm install
 
 # Start dev server with hot reload at localhost:3000
