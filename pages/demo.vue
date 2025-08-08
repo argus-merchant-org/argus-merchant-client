@@ -14,7 +14,7 @@ const filteredGames = computed(() => {
   if (!selectedBrand.value) {
     return demoGames
   }
-  return getGamesByBrand(selectedBrand.value).filter(game => game.is_demo_available)
+  return getGamesByBrand(selectedBrand.value).filter(game => game.isNew)
 })
 
 // 處理品牌切換

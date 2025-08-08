@@ -1,45 +1,63 @@
 import { gameList, gameBrands, gameCategories, GAME_QUERY_LIST } from '~/constants/games'
 import type { Game, GameBrand, GameCategory, GameQuery } from '~/types'
+import { games } from '~/data/games'
 
 export const useGames = () => {
   // 獲取所有遊戲
-  const getAllGames = () => gameList
+  const getAllGames = () => games
 
   // 獲取精選遊戲
-  const getFeaturedGames = () => gameList.filter(game => game.is_featured)
+  const getFeaturedGames = () => games.filter(game => game.isHot)
 
   // 根據品牌獲取遊戲
-  const getGamesByBrand = (brand: string) => gameList.filter(game => game.brand === brand)
+  const getGamesByBrand = (brand: string) => games.filter(game => game.providerName === brand)
 
   // 根據分類獲取遊戲
-  const getGamesByCategory = (category: string) => gameList.filter(game => game.category === category)
+  const getGamesByCategory = (category: string) => games.filter(game => game.category === category)
 
   // 搜尋遊戲
   const searchGames = (keyword: string) => {
+    if (!keyword.trim()) {
+      // 空搜尋返回前五個遊戲
+      return games.slice(0, 5)
+    }
+    
     const lowerKeyword = keyword.toLowerCase()
-    return gameList.filter(game => 
-      game.game_name_cn.toLowerCase().includes(lowerKeyword) ||
-      game.game_name_en.toLowerCase().includes(lowerKeyword)
+    return games.filter(game => 
+      game.name.zh.toLowerCase().includes(lowerKeyword) ||
+      game.name.en.toLowerCase().includes(lowerKeyword)
     )
   }
 
   // 獲取遊戲詳情
-  const getGameById = (id: number) => gameList.find(game => game.game_id === id)
+  const getGameById = (id: string) => games.find(game => game.id === id)
 
   // 獲取所有品牌
-  const getAllBrands = () => gameBrands
+  const getAllBrands = () => {
+    const brands = [...new Set(games.map(game => game.providerName))]
+    return brands.map(brand => ({
+      id: brand,
+      name: brand
+    }))
+  }
 
   // 獲取所有分類
-  const getAllCategories = () => gameCategories
+  const getAllCategories = () => {
+    const categories = [...new Set(games.map(game => game.category))]
+    return categories.map(category => ({
+      id: category,
+      name: category
+    }))
+  }
 
   // 獲取查詢列表
   const getQueryList = () => GAME_QUERY_LIST
 
   // 獲取可試玩的遊戲
-  const getDemoGames = () => gameList.filter(game => game.is_demo_available)
+  const getDemoGames = () => games.filter(game => game.isNew)
 
   // 獲取可正式遊戲的遊戲
-  const getRealGames = () => gameList.filter(game => game.is_real_available)
+  const getRealGames = () => games.filter(game => game.isHot)
 
   return {
     getAllGames,

@@ -5,23 +5,15 @@ const route = useRoute()
 const { getGameById } = useGames()
 
 // 獲取遊戲ID
-const gameId = computed(() => parseInt(route.params.id as string))
+const gameId = computed(() => route.params.id as string)
 
 // 獲取遊戲詳情
 const game = computed(() => getGameById(gameId.value))
 
-// 處理試玩
-const handleDemo = () => {
-  if (game.value?.demo_url) {
-    window.open(game.value.demo_url, '_blank')
-  }
-}
-
-// 處理正式遊戲
-const handleReal = () => {
-  if (game.value?.real_url) {
-    window.open(game.value.real_url, '_blank')
-  }
+// 處理進入遊戲
+const handleEnterGame = () => {
+  // 這裡可以導向遊戲或顯示遊戲詳情
+  console.log('Enter game:', game.value)
 }
 
 // 頁面不存在時顯示404
@@ -39,25 +31,19 @@ if (!game.value) {
     <div class="game-header" mb-8>
       <div class="game-title-section" text-center>
         <h1 class="game-title" text-4xl font-bold mb-2>
-          {{ game.game_name_cn }}
+          {{ game.name.zh }}
         </h1>
         <p class="game-subtitle" text-xl text-gray-400 mb-4>
-          {{ game.game_name_en }}
+          {{ game.name.en }}
         </p>
         
-        <!-- 遊戲評分 -->
-        <div class="game-rating" flex justify-center items-center gap-2 mb-4>
-          <div class="rating-stars" flex>
-            <div
-              v-for="i in 5"
-              :key="i"
-              :class="i <= Math.floor(game.rating) ? 'text-yellow-400' : 'text-gray-400'"
-            >
-              ★
-            </div>
-          </div>
-          <span class="rating-score" text-lg font-bold>
-            {{ game.rating.toFixed(1) }}
+        <!-- 遊戲分類 -->
+        <div class="game-category" flex justify-center items-center gap-2 mb-4>
+          <span class="category-tag" bg-blue-500 text-white px-3 py-1 rounded text-sm>
+            {{ game.category }}
+          </span>
+          <span class="provider-tag" bg-gray-500 text-white px-3 py-1 rounded text-sm>
+            {{ game.providerName }}
           </span>
         </div>
       </div>
@@ -69,110 +55,112 @@ if (!game.value) {
       <div class="game-image-section">
         <div class="game-image-container" relative>
           <NuxtImg
-            v-if="game.game_cover_image"
-            :src="game.game_cover_image"
-            :alt="game.game_name_cn"
+            v-if="game.thumbnail"
+            :src="game.thumbnail"
+            :alt="game.name.zh"
             w-full
             h-auto
             rounded-lg
             shadow-lg
           />
           
-          <!-- 精選標籤 -->
+          <!-- 熱門標籤 -->
           <div
-            v-if="game.is_featured"
+            v-if="game.isHot"
             absolute
             top-4
             left-4
-            bg-yellow-500
-            text-black
+            bg-red-500
+            text-white
             px-3
             py-1
             text-sm
             font-bold
             rounded
           >
-            精選
+            熱門
           </div>
           
-          <!-- 波動性標籤 -->
+          <!-- 新遊戲標籤 -->
           <div
+            v-if="game.isNew"
             absolute
             top-4
             right-4
-            :class="game.volatility === 'high' ? 'text-red-500' : game.volatility === 'low' ? 'text-green-500' : 'text-yellow-500'"
-            bg-black:50
+            bg-green-500
+            text-white
             px-3
             py-1
             text-sm
             font-bold
             rounded
           >
-            {{ game.volatility === 'high' ? '高' : game.volatility === 'low' ? '低' : '中' }}波動
+            新遊戲
           </div>
         </div>
       </div>
 
       <!-- 遊戲資訊 -->
       <div class="game-info-section">
-        <!-- 遊戲描述 -->
         <div class="game-description" mb-6>
-          <h3 class="section-title" text-2xl font-bold mb-3>
-            遊戲描述
+          <h3 class="description-title" text-2xl font-bold mb-4>
+            遊戲介紹
           </h3>
           <p class="description-text" text-gray-300 leading-relaxed>
-            {{ game.description_cn }}
+            歡迎來到 {{ game.name.zh }}！這是一款由 {{ game.providerName }} 開發的精彩遊戲。
+            無論您是新手還是資深玩家，都能在這裡找到屬於您的遊戲樂趣。
           </p>
         </div>
 
-        <!-- 遊戲統計 -->
-        <div class="game-stats" mb-6>
-          <h3 class="section-title" text-2xl font-bold mb-3>
-            遊戲統計
-          </h3>
-          <div class="stats-grid" grid="~ cols-2" gap-4>
-            <div class="stat-item" bg-gray-800 p-4 rounded-lg>
-              <div class="stat-label" text-gray-400 text-sm mb-1>
-                RTP
-              </div>
-              <div class="stat-value" text-xl font-bold>
-                {{ game.rtp }}%
-              </div>
-            </div>
-            <div class="stat-item" bg-gray-800 p-4 rounded-lg>
-              <div class="stat-label" text-gray-400 text-sm mb-1>
-                最小投注
-              </div>
-              <div class="stat-value" text-xl font-bold>
-                ${{ game.min_bet }}
-              </div>
-            </div>
-            <div class="stat-item" bg-gray-800 p-4 rounded-lg>
-              <div class="stat-label" text-gray-400 text-sm mb-1>
-                最大投注
-              </div>
-              <div class="stat-value" text-xl font-bold>
-                ${{ game.max_bet }}
-              </div>
-            </div>
-            <div class="stat-item" bg-gray-800 p-4 rounded-lg>
-              <div class="stat-label" text-gray-400 text-sm mb-1>
-                波動性
-              </div>
-              <div class="stat-value" text-xl font-bold>
-                {{ game.volatility === 'high' ? '高' : game.volatility === 'low' ? '低' : '中' }}
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- 遊戲按鈕 -->
-        <div class="game-actions">
-          <ModeSwitcher
-            :game="game"
-            @demo="handleDemo"
-            @real="handleReal"
-          />
+        <div class="game-actions" space-y-4>
+          <button
+            class="enter-game-btn"
+            w-full
+            py-4
+            px-6
+            bg-blue-500
+            text-white
+            text-lg
+            font-bold
+            rounded-lg
+            hover="bg-blue-600"
+            transition-colors
+            @click="handleEnterGame"
+          >
+            進入遊戲
+          </button>
+          
+          <div class="action-buttons" flex gap-4>
+            <button
+              class="demo-btn"
+              flex-1
+              py-3
+              px-4
+              bg-green-500
+              text-white
+              rounded-lg
+              hover="bg-green-600"
+              transition-colors
+              @click="handleEnterGame"
+            >
+              試玩
+            </button>
+            <button
+              class="real-btn"
+              flex-1
+              py-3
+              px-4
+              bg-red-500
+              text-white
+              rounded-lg
+              hover="bg-red-600"
+              transition-colors
+              @click="handleEnterGame"
+            >
+              正式
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -188,28 +176,16 @@ if (!game.value) {
   @apply w-full;
 }
 
-.game-title-section {
-  @apply w-full;
-}
-
 .game-title {
   @apply text-white;
 }
 
 .game-subtitle {
-  @apply text-gray-400;
+  @apply text-lg;
 }
 
-.game-rating {
+.game-category {
   @apply w-full;
-}
-
-.rating-stars {
-  @apply text-xl;
-}
-
-.rating-score {
-  @apply text-white;
 }
 
 .game-content {
@@ -232,7 +208,7 @@ if (!game.value) {
   @apply w-full;
 }
 
-.section-title {
+.description-title {
   @apply text-white;
 }
 
@@ -240,27 +216,15 @@ if (!game.value) {
   @apply text-base;
 }
 
-.game-stats {
-  @apply w-full;
-}
-
-.stats-grid {
-  @apply w-full;
-}
-
-.stat-item {
-  @apply w-full;
-}
-
-.stat-label {
-  @apply text-xs;
-}
-
-.stat-value {
-  @apply text-white;
-}
-
 .game-actions {
+  @apply w-full;
+}
+
+.enter-game-btn {
+  @apply w-full;
+}
+
+.action-buttons {
   @apply w-full;
 }
 </style> 

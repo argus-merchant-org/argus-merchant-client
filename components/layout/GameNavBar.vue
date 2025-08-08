@@ -44,35 +44,27 @@ const handleMember = () => {
     border="t lg:r base"
     bg-black
   >
-    <!-- 首頁 -->
-    <NuxtLink v-slot="{ isActive }" to="/" :title="'首頁'">
+    <!-- 選單 -->
+    <NuxtLink v-slot="{ isActive }" to="/menu" :title="'選單'">
       <div
         text-2xl
-        :class="isActive ? 'i-ph-house-fill text-primary' : 'i-ph-house'"
+        :class="isActive ? 'i-ph-list-fill text-primary' : 'i-ph-list'"
       />
     </NuxtLink>
 
-    <!-- 試玩模式 -->
-    <NuxtLink v-slot="{ isActive }" to="/demo" :title="'試玩模式'">
+    <!-- 遊戲 -->
+    <NuxtLink v-slot="{ isActive }" to="/games" :title="'遊戲'">
       <div
         text-2xl
-        :class="isActive ? 'i-ph-play-circle-fill text-primary' : 'i-ph-play-circle'"
+        :class="isActive ? 'i-ph-game-controller-fill text-primary' : 'i-ph-game-controller'"
       />
     </NuxtLink>
 
-    <!-- 正式模式 -->
-    <NuxtLink v-slot="{ isActive }" to="/real" :title="'正式模式'">
+    <!-- 正式 -->
+    <NuxtLink v-slot="{ isActive }" to="/real" :title="'正式'">
       <div
         text-2xl
         :class="isActive ? 'i-ph-currency-dollar-fill text-primary' : 'i-ph-currency-dollar'"
-      />
-    </NuxtLink>
-
-    <!-- 搜尋 -->
-    <NuxtLink v-slot="{ isActive }" to="/search" :title="'搜尋遊戲'">
-      <div
-        text-2xl
-        :class="isActive ? 'i-ph-magnifying-glass-fill text-primary' : 'i-ph-magnifying-glass'"
       />
     </NuxtLink>
   </div>

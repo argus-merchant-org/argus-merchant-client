@@ -130,27 +130,16 @@ export interface Credits {
 
 // 遊戲相關類型定義
 export interface Game {
-  game_id: number
-  game_code: string
-  game_name_cn: string
-  game_name_en: string
-  game_cover_image: string
-  game_report_name: string
-  brand: string
-  category: 'slot' | 'table' | 'live' | 'arcade'
-  rating: number
-  is_featured: boolean
-  is_demo_available: boolean
-  is_real_available: boolean
-  demo_url?: string
-  real_url?: string
-  min_bet?: number
-  max_bet?: number
-  rtp?: number
-  volatility?: 'low' | 'medium' | 'high'
-  release_date?: string
-  description_cn?: string
-  description_en?: string
+  id: string
+  name: {
+    zh: string
+    en: string
+  }
+  providerName: string
+  thumbnail: string
+  isHot: boolean
+  isNew: boolean
+  category: string
 }
 
 export interface GameBrand {

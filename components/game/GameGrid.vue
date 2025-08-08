@@ -26,7 +26,7 @@ defineProps<{
     <div class="game-grid" grid="~ cols-2 sm:cols-3 md:cols-4 lg:cols-5 xl:cols-6" gap-4>
       <GameCard
         v-for="game in games"
-        :key="game.game_id"
+        :key="game.id"
         :game="game"
         :show-demo-button="showDemoButton"
         :show-real-button="showRealButton"

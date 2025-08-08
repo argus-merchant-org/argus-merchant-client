@@ -15,7 +15,7 @@ const filteredGames = computed(() => {
   if (!selectedBrand.value) {
     return allGames
   }
-  return allGames.filter(game => game.brand === selectedBrand.value)
+  return allGames.filter(game => game.providerName === selectedBrand.value)
 })
 
 // 處理品牌切換

@@ -11,32 +11,12 @@ const { locale } = useI18n()
 
 // 根據語言獲取遊戲名稱
 const gameName = computed(() => {
-  return locale.value === 'zh' ? props.game.game_name_cn : props.game.game_name_en
+  return locale.value === 'zh' ? props.game.name.zh : props.game.name.en
 })
 
-// 格式化評分
-const formatRating = (rating: number) => {
-  return rating.toFixed(1)
-}
-
-// 獲取波動性標籤
-const getVolatilityLabel = (volatility: string) => {
-  const labels = {
-    low: '低',
-    medium: '中',
-    high: '高'
-  }
-  return labels[volatility as keyof typeof labels] || '中'
-}
-
-// 獲取波動性顏色
-const getVolatilityColor = (volatility: string) => {
-  const colors = {
-    low: 'text-green-500',
-    medium: 'text-yellow-500',
-    high: 'text-red-500'
-  }
-  return colors[volatility as keyof typeof colors] || 'text-yellow-500'
+// 進入遊戲
+const enterGame = (game: Game) => {
+  navigateTo(`/games/${game.id}`)
 }
 </script>
 
@@ -52,108 +32,116 @@ const getVolatilityColor = (volatility: string) => {
       transition
       duration-400
       hover="scale-105 z10"
+      cursor-pointer
+      @click="enterGame(game)"
     >
       <NuxtImg
-        v-if="game.game_cover_image"
+        v-if="game.thumbnail"
         width="400"
         height="600"
         format="webp"
-        :src="game.game_cover_image"
+        :src="game.thumbnail"
         :alt="gameName"
         w-full
         h-full
         object-cover
-        :style="{ 'view-transition-name': `game-${game.game_id}` }"
+        :style="{ 'view-transition-name': `game-${game.id}` }"
       />
       <div v-else h-full op10 flex>
         <div i-ph:question ma text-4xl />
       </div>
       
-      <!-- 精選標籤 -->
+      <!-- 熱門標籤 -->
       <div
-        v-if="game.is_featured"
+        v-if="game.isHot"
         absolute
         top-2
         left-2
-        bg-yellow-500
-        text-black
+        bg-red-500
+        text-white
         px-2
         py-1
         text-xs
         font-bold
         rounded
       >
-        精選
+        熱門
       </div>
       
-      <!-- 波動性標籤 -->
+      <!-- 新遊戲標籤 -->
       <div
+        v-if="game.isNew"
         absolute
         top-2
         right-2
-        :class="getVolatilityColor(game.volatility || 'medium')"
-        bg-black:50
+        bg-green-500
+        text-white
         px-2
         py-1
         text-xs
         font-bold
         rounded
       >
-        {{ getVolatilityLabel(game.volatility || 'medium') }}
+        新遊戲
+      </div>
+      
+      <!-- 提供商標籤 -->
+      <div
+        absolute
+        bottom-2
+        left-2
+        bg-blue-500
+        text-white
+        px-2
+        py-1
+        text-xs
+        font-bold
+        rounded
+      >
+        {{ game.providerName }}
       </div>
     </div>
 
     <!-- 遊戲資訊 -->
-    <div mt-2>
-      <div class="game-title" font-medium>
+    <div class="game-info" p-3>
+      <h3 class="game-title" text-lg font-semibold mb-2>
         {{ gameName }}
-      </div>
-      
-      <!-- 評分 -->
-      <div flex text-sm gap-2 items-center mt-1>
-        <div class="rating-stars" flex>
-          <div
-            v-for="i in 5"
-            :key="i"
-            :class="i <= Math.floor(game.rating) ? 'text-yellow-400' : 'text-gray-400'"
-          >
-            ★
-          </div>
-        </div>
-        <div op60>
-          {{ formatRating(game.rating) }}
-        </div>
-      </div>
-      
-      <!-- 遊戲按鈕 -->
-      <div flex gap-2 mt-2>
+      </h3>
+      <p class="game-category" text-sm text-gray-500>
+        {{ game.category }}
+      </p>
+    </div>
+
+    <!-- 按鈕區域 -->
+    <div v-if="showDemoButton || showRealButton" class="game-actions" p-3 pt-0>
+      <div flex gap-2>
         <button
-          v-if="showDemoButton && game.is_demo_available"
-          class="demo-btn"
+          v-if="showDemoButton"
+          class="demo-button"
+          flex-1
+          py-2
+          px-4
           bg-blue-500
-          hover:bg-blue-600
           text-white
-          px-3
-          py-1
-          text-sm
           rounded
-          transition
-          duration-200
+          hover="bg-blue-600"
+          transition-colors
+          @click="enterGame(game)"
         >
           試玩
         </button>
         <button
-          v-if="showRealButton && game.is_real_available"
-          class="real-btn"
+          v-if="showRealButton"
+          class="real-button"
+          flex-1
+          py-2
+          px-4
           bg-green-500
-          hover:bg-green-600
           text-white
-          px-3
-          py-1
-          text-sm
           rounded
-          transition
-          duration-200
+          hover="bg-green-600"
+          transition-colors
+          @click="enterGame(game)"
         >
           正式
         </button>
@@ -164,22 +152,26 @@ const getVolatilityColor = (volatility: string) => {
 
 <style scoped>
 .game-card {
-  @apply transition-all duration-300 hover:shadow-lg;
+  @apply bg-white rounded-lg shadow-md overflow-hidden;
 }
 
 .game-image-container {
-  @apply overflow-hidden rounded-lg;
+  @apply relative;
+}
+
+.game-info {
+  @apply bg-white;
 }
 
 .game-title {
-  @apply text-sm leading-tight;
+  @apply text-gray-800;
 }
 
-.rating-stars {
-  @apply text-xs;
+.game-category {
+  @apply text-gray-500;
 }
 
-.demo-btn, .real-btn {
-  @apply font-medium;
+.game-actions {
+  @apply bg-white;
 }
 </style> 
